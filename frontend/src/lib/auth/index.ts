@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AUTH_API_BASE = "http://localhost:8000/docs"; // ou use variável de ambiente
+const AUTH_API_BASE = "http://localhost:8000/docs";
 
 export interface LoginData {
   username: string;

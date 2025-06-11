@@ -2,20 +2,26 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "@/lib/api";
+import { registerUser, loginUser } from "@/lib/api";
 import axios from "axios";
+import { useAuth } from "@/contexts/auth-context";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault(); // evita reload
+    e.preventDefault();
     try {
       await registerUser(username, password);
-      alert("Usuário registrado com sucesso!");
-      router.push("/login"); // redireciona após registro
+
+      const { access_token } = await loginUser(username, password);
+      login(access_token);
+
+      router.push("/");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         alert(
@@ -31,24 +37,58 @@ export default function RegisterPage() {
   };
 
   return (
-    <main>
-      <h1>Registrar</h1>
-      <form onSubmit={handleRegister}>
-        <input
-          placeholder="Usuário"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Cadastrar</button>
-      </form>
-    </main>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-slate-100 border-2 rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <h1 className="text-3xl font-extrabold text-center text-black mb-6">
+          Cadastro
+        </h1>
+
+        <form onSubmit={handleRegister} className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold text-black mb-1">
+              Usuário
+            </label>
+            <input
+              placeholder="Seu nome de usuário"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black font-medium"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold text-black mb-1">
+              Senha
+            </label>
+            <input
+              type="password"
+              placeholder="Sua senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black font-medium"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-black text-slate-100 py-2 rounded-lg text-lg font-bold hover:brightness-125 transition"
+          >
+            Cadastrar-se
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-black mt-6">
+          Já tem uma conta?{" "}
+          <Link
+            href="/login"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Entrar
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }
