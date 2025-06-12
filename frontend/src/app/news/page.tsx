@@ -75,28 +75,28 @@ export default function NewsListPage() {
   return (
     <div>
       <h1 className="font-extrabold text-5xl mb-8">Lista de Notícias</h1>
-      <ul>
+      <ul className="flex flex-col gap-8">
         {newsList.map((news) => (
           <li key={news.id}>
             <Link href={`/news/${news.id}`}>
-              <div className="flex border-1 border-transparent rounded p-4 gap-4 hover:border-black cursor-pointer transition">
-                <div>
-                  {news.image && (
-                    <Image
-                      src={news.image}
-                      alt={news.name}
-                      width={320}
-                      height={180}
-                      className="object-cover object-center w-[320px] h-[180px] rounded-xl"
-                    />
-                  )}
+              <div className="flex group gap-4 cursor-pointer transition">
+                {news.image && (
+                  <Image
+                    src={news.image}
+                    alt={news.name}
+                    width={320}
+                    height={180}
+                    className="object-cover object-center rounded-xl group-hover:scale-101 transition"
+                  />
+                )}
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-extrabold text-3xl group-hover:text-slate-700 transition">
+                    {news.name}
+                  </h2>
+                  <p>{news.description}</p>
                   <small>
                     {news.author_username} - {formatDateTime(news.created_at)}
                   </small>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-extrabold text-3xl">{news.name}</h2>
-                  <p>{news.description}</p>
                 </div>
               </div>
             </Link>

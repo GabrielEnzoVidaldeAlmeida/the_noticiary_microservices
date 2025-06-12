@@ -31,7 +31,7 @@ export default function CreateNewsPage() {
         image,
       });
       alert("Notícia criada com sucesso!");
-      router.push("/");
+      router.push("/news");
     } catch (err) {
       console.error(err);
       alert("Erro ao criar notícia.");
