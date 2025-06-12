@@ -16,9 +16,10 @@ import {
 import { News } from "@/types/news";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { SquarePenIcon, SquareXIcon, ThumbsDown, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { formatDateTime } from "@/utils/format-datetime";
 
 interface Props {
   id: string;
@@ -133,6 +134,12 @@ export default function NewsDetailClient({ id }: Props) {
           priority
         />
       )}
+      <div className="mt-2 italic text-gray-500">
+        <label>
+          {news.author_username} - {formatDateTime(news.created_at)}
+        </label>
+      </div>
+
       <div className="py-6">
         <span className="font-bold italic text-xl text-slate-600 text-justify">
           {news.description}
@@ -141,40 +148,44 @@ export default function NewsDetailClient({ id }: Props) {
       <article className="whitespace-pre-line text-justify">
         {news.content}
       </article>
-      <div className="flex items-center gap-4 mt-4">
-        <button
-          onClick={handleLike}
-          style={{ color: userInteraction === "like" ? "green" : "black" }}
-        >
-          <div className="flex gap-2 cursor-pointer">
-            <ThumbsUp /> ({stats?.likes_count ?? 0})
-          </div>
-        </button>
-        <button
-          onClick={handleDislike}
-          style={{ color: userInteraction === "dislike" ? "red" : "black" }}
-        >
-          <div className="flex gap-2 cursor-pointer">
-            <ThumbsDown /> ({stats?.dislikes_count ?? 0})
-          </div>
-        </button>
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleLike}
+            style={{ color: userInteraction === "like" ? "green" : "black" }}
+          >
+            <div className="flex gap-2 cursor-pointer">
+              <ThumbsUp /> ({stats?.likes_count ?? 0})
+            </div>
+          </button>
+          <button
+            onClick={handleDislike}
+            style={{ color: userInteraction === "dislike" ? "red" : "black" }}
+          >
+            <div className="flex gap-2 cursor-pointer">
+              <ThumbsDown /> ({stats?.dislikes_count ?? 0})
+            </div>
+          </button>
+        </div>
 
-        {user?.id === news.author_id && (
-          <div className="flex gap-4 mt-4">
-            <Link
-              href={`/news/edit/${news.id}`}
-              className="text-blue-600 underline"
-            >
-              Editar notícia
-            </Link>
-            <button
-              onClick={handleDelete}
-              className="text-red-600 underline hover:text-red-800"
-            >
-              Deletar notícia
-            </button>
-          </div>
-        )}
+        <div className="flex items-center">
+          {user?.id === news.author_id && (
+            <div className="flex gap-4 mt-4">
+              <Link
+                href={`/news/edit/${news.id}`}
+                className="cursor-pointer text-blue-600 hover:text-blue-800 underline transition"
+              >
+                <SquarePenIcon />
+              </Link>
+              <button
+                onClick={handleDelete}
+                className="cursor-pointer text-red-600 underline hover:text-red-800 transition"
+              >
+                <SquareXIcon />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
