@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background text-main-text font-poppins flex flex-col min-h-screen">
+      <body className="">
         <Providers>
           <header>
             <NavBar />

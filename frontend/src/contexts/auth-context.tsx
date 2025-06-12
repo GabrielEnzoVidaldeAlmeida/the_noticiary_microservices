@@ -10,6 +10,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
+  token: string | null; // ADICIONADO
   loading: boolean;
   login: (token: string) => void;
   logout: () => void;
@@ -19,41 +20,47 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null); // ADICIONADO
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const savedToken = localStorage.getItem("token");
+    if (!savedToken) {
       setLoading(false);
       return;
     }
 
-    getMe(token)
+    setToken(savedToken);
+    getMe(savedToken)
       .then((user) => setUser(user))
       .catch(() => {
         localStorage.removeItem("token");
+        setToken(null);
         setUser(null);
       })
       .finally(() => setLoading(false));
   }, []);
 
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
-    getMe(token)
+  const login = (newToken: string) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken); // ADICIONADO
+    getMe(newToken)
       .then((user) => setUser(user))
       .catch(() => {
         localStorage.removeItem("token");
+        setToken(null);
         setUser(null);
       });
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    setToken(null); // ADICIONADO
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

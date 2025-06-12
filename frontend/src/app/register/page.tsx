@@ -21,7 +21,7 @@ export default function RegisterPage() {
       const { access_token } = await loginUser(username, password);
       login(access_token);
 
-      router.push("/");
+      router.push("/news");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         alert(

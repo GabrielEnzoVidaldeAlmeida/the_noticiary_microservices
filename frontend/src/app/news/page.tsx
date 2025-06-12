@@ -1,0 +1,115 @@
+"use client";
+
+import { useEffect, useState, useCallback, useRef } from "react";
+import { getNewsList } from "@/lib/api";
+import { News } from "@/types/news";
+import Image from "next/image";
+import { formatDateTime } from "@/utils/format-datetime";
+import Link from "next/link";
+
+export default function NewsListPage() {
+  const [newsList, setNewsList] = useState<News[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Ref para bloquear chamadas simultâneas
+  const isLoadingRef = useRef(false);
+
+  const loadMoreNews = useCallback(async () => {
+    if (isLoadingRef.current || !hasMore) return;
+
+    isLoadingRef.current = true;
+    setLoading(true);
+    try {
+      const data = await getNewsList(page, 10);
+      console.log(
+        "IDs recebidos:",
+        data.news.map((n) => n.id)
+      );
+
+      setNewsList((prev) => {
+        const existingIds = new Set(prev.map((n) => n.id));
+        const filteredNews = data.news.filter((n) => !existingIds.has(n.id));
+        return [...prev, ...filteredNews];
+      });
+
+      if (data.news.length < 10) {
+        setHasMore(false);
+      } else {
+        setPage((prev) => prev + 1);
+      }
+    } finally {
+      setLoading(false);
+      isLoadingRef.current = false;
+    }
+  }, [page, hasMore]);
+
+  // Resetar a lista de notícias ao montar
+  useEffect(() => {
+    setNewsList([]);
+    setPage(1);
+    setHasMore(true);
+  }, []);
+
+  // Carregar a primeira página
+  useEffect(() => {
+    loadMoreNews();
+  }, [loadMoreNews]);
+
+  // Scroll infinito
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = document.body.offsetHeight - 200;
+
+      if (scrollPosition >= threshold) {
+        loadMoreNews();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadMoreNews]);
+
+  return (
+    <div>
+      <h1 className="font-extrabold text-5xl mb-8">Lista de Notícias</h1>
+      <ul>
+        {newsList.map((news) => (
+          <li key={news.id}>
+            <Link href={`/news/${news.id}`}>
+              <div className="flex border-1 border-transparent rounded p-4 gap-4 hover:border-black cursor-pointer transition">
+                <div>
+                  {news.image && (
+                    <Image
+                      src={news.image}
+                      alt={news.name}
+                      width={320}
+                      height={180}
+                      className="object-cover object-center w-[320px] h-[180px] rounded-xl"
+                    />
+                  )}
+                  <small>
+                    {news.author_username} - {formatDateTime(news.created_at)}
+                  </small>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-extrabold text-3xl">{news.name}</h2>
+                  <p>{news.description}</p>
+                </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      {loading && <p>Carregando mais notícias...</p>}
+      {!hasMore && (
+        <p className="flex justify-center mt-10 font-bold text-slate-700">
+          Não há mais notícias.
+        </p>
+      )}
+    </div>
+  );
+}

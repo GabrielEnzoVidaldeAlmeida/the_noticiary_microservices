@@ -36,7 +36,7 @@ export default function NavBar() {
 
   return (
     <nav className="bg-black flex justify-between items-center p-4 sm:p-6 md:p-8 relative">
-      <Link href="/">
+      <Link href="/news">
         <h1 className="text-slate-100 text-xl font-extrabold sm:text-2xl md:text-3xl hover:brightness-75 transition">
           The Noticiary
         </h1>
@@ -46,7 +46,7 @@ export default function NavBar() {
         <div className="relative">
           <button
             onClick={toggleHandleProfile}
-            className="text-slate-100 font-extrabold flex items-center gap-1 text-sm sm:text-base md:text-xl hover:brightness-75 transition"
+            className="text-slate-100 font-extrabold flex items-center gap-1 text-sm sm:text-base md:text-xl hover:brightness-75 cursor-pointer transition"
           >
             Olá, {user.username}
           </button>
@@ -57,7 +57,7 @@ export default function NavBar() {
               className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 p-4 space-y-3 text-black"
             >
               <Link
-                href="#"
+                href="/news/create"
                 className="flex items-center gap-2 hover:text-blue-600 transition"
               >
                 <PlusIcon size={18} /> Adicionar notícia

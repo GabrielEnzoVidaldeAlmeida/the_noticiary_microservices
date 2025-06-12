@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ["preview.redd.it"], // Adicione aqui os domínios permitidos
+  },
 };
 
 export default nextConfig;
