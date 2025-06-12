@@ -37,7 +37,6 @@ export const createNews = async (
     image?: string;
   }
 ) => {
-  // Garantir que a URL da imagem comece com '/'
   if (data.image && !data.image.startsWith("/")) {
     data.image = "/" + data.image;
   }

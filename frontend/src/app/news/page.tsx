@@ -13,7 +13,6 @@ export default function NewsListPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  // Ref para bloquear chamadas simultâneas
   const isLoadingRef = useRef(false);
 
   const loadMoreNews = useCallback(async () => {
@@ -45,19 +44,16 @@ export default function NewsListPage() {
     }
   }, [page, hasMore]);
 
-  // Resetar a lista de notícias ao montar
   useEffect(() => {
     setNewsList([]);
     setPage(1);
     setHasMore(true);
   }, []);
 
-  // Carregar a primeira página
   useEffect(() => {
     loadMoreNews();
   }, [loadMoreNews]);
 
-  // Scroll infinito
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.innerHeight + window.scrollY;

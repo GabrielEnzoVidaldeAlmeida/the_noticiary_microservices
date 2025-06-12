@@ -1,5 +1,3 @@
-// app/news/[id]/page.tsx
-
 import NewsDetailClient from ".";
 
 interface PageProps {

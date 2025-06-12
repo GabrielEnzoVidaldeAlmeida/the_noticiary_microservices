@@ -1,4 +1,3 @@
-// app/news/[id]/NewsDetailClient.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -36,7 +35,7 @@ export default function NewsDetailClient({ id }: Props) {
   >(null);
 
   const handleDelete = async () => {
-    if (!news) return; // garante que news não é null
+    if (!news) return;
     const confirmDelete = confirm(
       "Tem certeza que deseja excluir esta notícia?"
     );

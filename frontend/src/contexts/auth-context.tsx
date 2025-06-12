@@ -10,7 +10,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  token: string | null; // ADICIONADO
+  token: string | null;
   loading: boolean;
   login: (token: string) => void;
   logout: () => void;
@@ -20,7 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null); // ADICIONADO
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = (newToken: string) => {
     localStorage.setItem("token", newToken);
-    setToken(newToken); // ADICIONADO
+    setToken(newToken);
     getMe(newToken)
       .then((user) => setUser(user))
       .catch(() => {
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    setToken(null); // ADICIONADO
+    setToken(null);
     setUser(null);
   };
 
