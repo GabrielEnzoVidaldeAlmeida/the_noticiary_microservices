@@ -89,14 +89,18 @@ export default function NewsListPage() {
                     className="object-cover object-center rounded-xl group-hover:scale-101 transition"
                   />
                 )}
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-extrabold text-3xl group-hover:text-slate-700 transition">
-                    {news.name}
-                  </h2>
-                  <p>{news.description}</p>
-                  <small>
-                    {news.author_username} - {formatDateTime(news.created_at)}
-                  </small>
+                <div className="flex flex-col justify-between gap-4">
+                  <div className="flex flex-col gap-4">
+                    <h2 className="font-extrabold text-3xl group-hover:text-slate-700 transition">
+                      {news.name}
+                    </h2>
+                    <p>{news.description}</p>
+                  </div>
+                  <div>
+                    <small>
+                      {news.author_username} - {formatDateTime(news.created_at)}
+                    </small>
+                  </div>
                 </div>
               </div>
             </Link>

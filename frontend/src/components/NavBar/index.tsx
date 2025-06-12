@@ -3,12 +3,12 @@
 import { useAuth } from "@/contexts/auth-context";
 import { LogOutIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 
 export default function NavBar() {
   const { user, logout, loading } = useAuth();
-  const router = useRouter();
+  // const router = useRouter();
   const [handleProfile, setHandleProfile] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +66,7 @@ export default function NavBar() {
               <button
                 onClick={() => {
                   logout();
-                  router.push("/login");
+                  // router.push("/login");
                 }}
                 className="flex items-center cursor-pointer gap-2 text-red-600 hover:text-red-800 transition"
               >
