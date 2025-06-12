@@ -47,27 +47,31 @@ export default function EditNewsPage() {
   if (!news) return <p>Carregando...</p>;
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 p-4">
-      <h1 className="text-2xl font-bold mb-4">Editar Notícia</h1>
+    <div>
+      <h1 className="font-extrabold text-5xl mb-8">Editar Notícia</h1>
       <form onSubmit={handleUpdate} className="space-y-4">
+        <strong className="font-bold text-xl">Título:</strong>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full border p-2 rounded"
           placeholder="Título"
         />
+        <strong className="font-bold text-xl">Conteúdo:</strong>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full border p-2 rounded"
+          className="w-full h-80 border p-2 rounded"
           placeholder="Conteúdo"
         />
+        <strong className="font-bold text-xl">Descrição:</strong>
         <input
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full border p-2 rounded"
           placeholder="Descrição (opcional)"
         />
+        <strong className="font-bold text-xl">URL da imagem:</strong>
         <input
           value={image}
           onChange={(e) => setImage(e.target.value)}
@@ -76,7 +80,7 @@ export default function EditNewsPage() {
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:brightness-110 transition"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:brightness-110 cursor-pointer transition"
         >
           Salvar alterações
         </button>
